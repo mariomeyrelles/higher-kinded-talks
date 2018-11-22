@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModeloCozinhaIndustrialExemplo2", "XUnitTestProject1\ModeloCozinhaIndustrialExemplo2.csproj", "{EBC95C6C-E7FA-4F13-9270-D709FC6EEF4F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModeloCozinhaIndustrialExemplo1", "ModeloCozinhaIndustrialExemplo1\ModeloCozinhaIndustrialExemplo1.csproj", "{58B72744-1B07-4B9A-B8E3-A305CF243CFD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EBC95C6C-E7FA-4F13-9270-D709FC6EEF4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBC95C6C-E7FA-4F13-9270-D709FC6EEF4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBC95C6C-E7FA-4F13-9270-D709FC6EEF4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBC95C6C-E7FA-4F13-9270-D709FC6EEF4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58B72744-1B07-4B9A-B8E3-A305CF243CFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58B72744-1B07-4B9A-B8E3-A305CF243CFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58B72744-1B07-4B9A-B8E3-A305CF243CFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58B72744-1B07-4B9A-B8E3-A305CF243CFD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D4C2F59D-2448-4DF5-AFAA-D1688A98F3D1}
+	EndGlobalSection
+EndGlobal
