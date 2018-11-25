@@ -18,14 +18,19 @@ namespace ModeloCozinhaIndustrialExemplo2
         {
             kitchen = new Kitchen();
         }
-        private void Given_chef_is_available(string chefName)
+        private void Given_chef_is_available()
         {
-            
+            var availabiltyResult = kitchen.GetChefAvailability();
+
+            Assert.IsTrue(availabiltyResult.Availability == ChefAvailability.Idle);
+           
         }
-        private void When_an_order_arrives_at_the_kitchen(string order)
+
+        private void When_an_order_arrives_at_the_kitchen(string table, string order)
         {
 
         }
+
         private void Then_dish_must_be_prepared()
         {
 
@@ -36,5 +41,22 @@ namespace ModeloCozinhaIndustrialExemplo2
 
     internal class Kitchen
     {
+        internal ChefAvailabilityResult GetChefAvailability()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    enum ChefAvailability
+    {
+        Idle = 1,
+        Unavailable = 2,
+        AvailableSoon = 3
+    }
+
+    class ChefAvailabilityResult
+    {
+        public ChefAvailability Availability;
+        public string ChefName;
     }
 }

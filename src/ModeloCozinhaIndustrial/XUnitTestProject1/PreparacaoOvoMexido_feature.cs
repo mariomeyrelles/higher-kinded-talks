@@ -22,8 +22,8 @@ I want to use the ingredients to prepare the dish")]
         {
             Runner.RunScenario(
                 _ => Given_kitchen_is_available(),
-                _ => Given_chef_is_available("Chef 1"),
-                _ => When_an_order_arrives_at_the_kitchen("Scrambled Egg"),
+                _ => Given_chef_is_available(),
+                _ => When_an_order_arrives_at_the_kitchen("Table1", "Scrambled Egg"),
                 _ => Then_dish_must_be_prepared()
              );
         }
