@@ -12,14 +12,15 @@ namespace ModeloCozinhaIndustrialExemplo2
     public partial class PreparacaoOvoMexido_feature : FeatureFixture
     {
 
+        private Kitchen kitchen; 
 
         private void Given_kitchen_is_available()
         {
-
+            kitchen = new Kitchen();
         }
         private void Given_chef_is_available(string chefName)
         {
-
+            
         }
         private void When_an_order_arrives_at_the_kitchen(string order)
         {
@@ -31,5 +32,9 @@ namespace ModeloCozinhaIndustrialExemplo2
         }
 
 
+    }
+
+    internal class Kitchen
+    {
     }
 }
