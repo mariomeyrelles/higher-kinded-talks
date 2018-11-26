@@ -15,12 +15,12 @@ namespace ModeloCozinhaIndustrialExemplo2
         private Kitchen kitchen;
         private DishPreparationOrder currentOrder;
         private string currentChef;
+        private OrderPreparationRequest currentOrderPreparationRequest;
 
         private void Given_kitchen_is_available()
         {
             kitchen = new Kitchen();
         }
-
 
         private void Given_chef_is_available()
         {
@@ -29,14 +29,10 @@ namespace ModeloCozinhaIndustrialExemplo2
             Assert.IsTrue(availabiltyResult.Availability == ChefAvailability.Idle);
 
             currentChef = availabiltyResult.ChefName;
-
-           
         }
-
 
         private void When_an_order_arrives_at_the_kitchen(string table, string dish)
         {
-
             var order = new DishPreparationOrder()
             {
                 Table = table,
@@ -48,20 +44,14 @@ namespace ModeloCozinhaIndustrialExemplo2
         }
 
 
-        private void Then_dish_must_be_prepared()
+        private void Then_dish_preparation_is_started()
         {
+            var orderPreparationRequest = kitchen.StartPreparation(currentOrder);
 
-        }
+            Assert.IsTrue(orderPreparationRequest.Accepted == orderPreparationRequest.Accepted);
 
+            currentOrderPreparationRequest = orderPreparationRequest;
 
-        private void Then_order_is_fullfilled()
-        {
-            
-        }
-
-        private object Then_dish_preparation_is_started()
-        {
-            throw new NotImplementedException();
         }
 
         private object Then_recipe_is_selected()
@@ -77,6 +67,12 @@ namespace ModeloCozinhaIndustrialExemplo2
         private object Then_chef_prepares_the_dish()
         {
             throw new NotImplementedException();
+        }
+
+
+        private void Then_order_is_fullfilled()
+        {
+
         }
     }
 
@@ -99,6 +95,28 @@ namespace ModeloCozinhaIndustrialExemplo2
 
             return result;
         }
+
+        internal OrderPreparationRequest StartPreparation(DishPreparationOrder order)
+        {
+            var request = new OrderPreparationRequest
+            {
+                Order = order
+            };
+
+            return request;
+        }
+    }
+
+    internal class OrderPreparationRequest
+    {
+        public DishPreparationOrder Order { get; internal set; }
+        public PreparationRequest Accepted { get; internal set; }
+    }
+
+    enum PreparationRequest
+    {
+        Accepted = 1,
+        Rejected = 2,
     }
 
     enum ChefAvailability
@@ -110,7 +128,7 @@ namespace ModeloCozinhaIndustrialExemplo2
 
     class ChefAvailabilityResult
     {
-        public ChefAvailability Availability;
-        public string ChefName;
+        public ChefAvailability Availability { get; internal set; }
+        public string ChefName { get; internal set; }
     }
 }
