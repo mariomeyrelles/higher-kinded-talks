@@ -26,7 +26,8 @@ I want to use the ingredients to prepare the dish")]
                 _ => When_an_order_arrives_at_the_kitchen("Table1", "Scrambled Egg"),
                 _ => Then_dish_preparation_is_started(),
                 _ => Then_recipe_is_selected(),
-                _ => Then_ingredients_are_selected(),
+                _ => Then_ingredients_are_available(),
+                _ => Then_ingredients_are_available(),
                 _ => Then_chef_prepares_the_dish(),
                 _ => Then_order_is_fullfilled()
              );

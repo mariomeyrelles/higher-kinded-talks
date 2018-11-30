@@ -4,6 +4,8 @@ using LightBDD.Framework.Scenarios.Basic;
 using LightBDD.MsTest2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace ModeloCozinhaIndustrialExemplo2
 {
@@ -16,10 +18,23 @@ namespace ModeloCozinhaIndustrialExemplo2
         private DishPreparationOrder currentOrder;
         private string currentChef;
         private OrderPreparationRequest currentOrderPreparationRequest;
+        private Recipe currentRecipe;
 
+
+        
         private void Given_kitchen_is_available()
         {
             kitchen = new Kitchen();
+
+
+            var recipe = new Recipe();
+            recipe.Ingredients.Add(new Ingredient() { Name = "Ovo",      Quantity = 1.0m, UnitOfMeasure = "unidade" });
+            recipe.Ingredients.Add(new Ingredient() { Name = "Leite",    Quantity = 1.0m, UnitOfMeasure = "xícara" });
+            recipe.Ingredients.Add(new Ingredient() { Name = "Manteiga", Quantity = 2.0m, UnitOfMeasure = "colher" });
+            recipe.Ingredients.Add(new Ingredient() { Name = "Sal",      Quantity = 1.0m, UnitOfMeasure = "pitada" });
+
+
+            kitchen.RegisterRecipe(recipe);
         }
 
         private void Given_chef_is_available()
@@ -43,30 +58,44 @@ namespace ModeloCozinhaIndustrialExemplo2
             currentOrder = order;
         }
 
-
         private void Then_dish_preparation_is_started()
         {
             var orderPreparationRequest = kitchen.StartPreparation(currentOrder);
-
             Assert.IsTrue(orderPreparationRequest.Accepted == orderPreparationRequest.Accepted);
-
             currentOrderPreparationRequest = orderPreparationRequest;
 
         }
 
-        private object Then_recipe_is_selected()
+        private void Then_recipe_is_selected()
         {
-            throw new NotImplementedException();
+            var recipe = kitchen.GetRecipe(currentOrderPreparationRequest);
+            currentRecipe = recipe;
+        
         }
 
-        private object Then_ingredients_are_selected()
+        private void Then_ingredients_are_available()
         {
-            throw new NotImplementedException();
+            Assert.IsTrue(currentRecipe.Ingredients.Contains(new Ingredient() { Name = "Ovo", Quantity = 1.0m, UnitOfMeasure = "unidade" }));
+            Assert.IsTrue(currentRecipe.Ingredients.Contains(new Ingredient() { Name = "Leite", Quantity = 1.0m, UnitOfMeasure = "xícara" }));
+            Assert.IsTrue(currentRecipe.Ingredients.Contains(new Ingredient() { Name = "Manteiga", Quantity = 2.0m, UnitOfMeasure = "colher" }));
+            Assert.IsTrue(currentRecipe.Ingredients.Contains(new Ingredient() { Name = "Sal", Quantity = 1.0m, UnitOfMeasure = "pitada" }));
+
+
         }
+
+
+        private void Then_recipe_steps_are_available()
+        {
+
+        }
+
 
         private object Then_chef_prepares_the_dish()
         {
             throw new NotImplementedException();
+
+
+
         }
 
 
@@ -75,6 +104,15 @@ namespace ModeloCozinhaIndustrialExemplo2
 
         }
     }
+    
+    public class Ingredient
+    {
+       
+        public string Name { get; internal set; }
+        public decimal Quantity { get; internal set; }
+        public string UnitOfMeasure { get; internal set; }
+    }
+
 
     internal class DishPreparationOrder
     {
@@ -85,6 +123,8 @@ namespace ModeloCozinhaIndustrialExemplo2
 
     internal class Kitchen
     {
+        private List<Recipe> recipes = new List<Recipe>();
+
         internal ChefAvailabilityResult GetChefAvailability()
         {
             var result = new ChefAvailabilityResult
@@ -105,6 +145,25 @@ namespace ModeloCozinhaIndustrialExemplo2
 
             return request;
         }
+
+        internal Recipe GetRecipe(OrderPreparationRequest request)
+        {
+            var recipe = (from x in this.recipes
+                         where x.RecipeName == request.Order.Dish
+                         select x).Single();
+            return recipe;
+        }
+
+        internal void RegisterRecipe(Recipe recipe)
+        {
+            this.recipes.Add(recipe);
+        }
+    }
+
+    internal class Recipe
+    {
+        public List<Ingredient> Ingredients = new List<Ingredient>();
+        public string RecipeName { get; internal set; }
     }
 
     internal class OrderPreparationRequest
