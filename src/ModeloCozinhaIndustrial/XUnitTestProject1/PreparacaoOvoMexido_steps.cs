@@ -27,14 +27,17 @@ namespace ModeloCozinhaIndustrialExemplo2
             kitchen = new Kitchen();
 
 
-            var recipe = new Recipe();
-            recipe.Ingredients.Add(new Ingredient() { Name = "Ovo",      Quantity = 1.0m, UnitOfMeasure = "unidade" });
-            recipe.Ingredients.Add(new Ingredient() { Name = "Leite",    Quantity = 1.0m, UnitOfMeasure = "xícara" });
-            recipe.Ingredients.Add(new Ingredient() { Name = "Manteiga", Quantity = 2.0m, UnitOfMeasure = "colher" });
-            recipe.Ingredients.Add(new Ingredient() { Name = "Sal",      Quantity = 1.0m, UnitOfMeasure = "pitada" });
+            var scrambledEgg = new Recipe();
+
+            scrambledEgg.Ingredients.Add(new Ingredient() { Name = "Ovo",      Quantity = 1.0m, UnitOfMeasure = "unidade" });
+            scrambledEgg.Ingredients.Add(new Ingredient() { Name = "Leite",    Quantity = 1.0m, UnitOfMeasure = "xícara" });
+            scrambledEgg.Ingredients.Add(new Ingredient() { Name = "Manteiga", Quantity = 2.0m, UnitOfMeasure = "colher" });
+            scrambledEgg.Ingredients.Add(new Ingredient() { Name = "Sal",      Quantity = 1.0m, UnitOfMeasure = "pitada" });
+
+            scrambledEgg.RecipeName = "Scrambled Egg";
 
 
-            kitchen.RegisterRecipe(recipe);
+            kitchen.RegisterRecipe(scrambledEgg);
         }
 
         private void Given_chef_is_available()
