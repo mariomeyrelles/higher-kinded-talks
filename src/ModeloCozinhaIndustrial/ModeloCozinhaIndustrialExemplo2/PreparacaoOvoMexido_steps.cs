@@ -26,17 +26,24 @@ namespace ModeloCozinhaIndustrialExemplo2
         {
             kitchen = new Kitchen();
 
+            var scrambledEggIngredients = new List<Ingredient>
+            {
+                new Ingredient(name: "Ovo", quantity: 1.0m, uom: "unidade"),
+                new Ingredient(name: "Leite", quantity: 1.0m, uom: "xícara"),
+                new Ingredient(name: "Manteiga", quantity: 2.0m, uom: "colher"),
+                new Ingredient(name: "Sal", quantity: 1.0m, uom: "pitada")
+            };
 
-            var scrambledEgg = new Recipe();
+            var scrambledEggPreparationSteps = new List<RecipeStep>
+            {
+                new RecipeStep(description: "Coloque os ovos em recipiente e deixe por 2 minutos"),
+                new RecipeStep(description: "Ligue a frigideira, coloque a manteiga e mexa bem"),
+                new RecipeStep(description: "Coloque os ovos e mexa bem"),
+                new RecipeStep(description: "Junte o leite e continue mexendo"),
+                new RecipeStep(description: "Coloque o sal e mexa até ficar consistente")
+            };
 
-            scrambledEgg.Ingredients.Add(new Ingredient(name: "Ovo",      quantity: 1.0m, uom: "unidade"));
-            scrambledEgg.Ingredients.Add(new Ingredient(name: "Leite",    quantity: 1.0m, uom: "xícara"));
-            scrambledEgg.Ingredients.Add(new Ingredient(name: "Manteiga", quantity: 2.0m, uom: "colher"));
-            scrambledEgg.Ingredients.Add(new Ingredient(name: "Sal",      quantity: 1.0m, uom: "pitada"));
-
-            scrambledEgg.RecipeName = "Scrambled Egg";
-
-
+            var scrambledEgg = new Recipe(recipeName: "Ovo Mexido", ingredients: scrambledEggIngredients, steps: scrambledEggPreparationSteps);
             kitchen.RegisterRecipe(scrambledEgg);
         }
 
@@ -203,15 +210,28 @@ namespace ModeloCozinhaIndustrialExemplo2
 
     internal class Recipe
     {
+        public Recipe(string recipeName, List<Ingredient> ingredients, List<RecipeStep> steps)
+        {
+            this.RecipeName = recipeName;
+            this.Ingredients = ingredients;
+            this.Steps = steps;
+          
+        }
 
-        public List<Ingredient> Ingredients = new List<Ingredient>();
-        public List<RecipeStep> Steps = new List<RecipeStep>();
-        public string RecipeName { get; internal set; }
+        public string RecipeName { get; }
+        public IReadOnlyList<RecipeStep> Steps { get; }
+        public IReadOnlyList<Ingredient> Ingredients { get;  }
     }
 
     public class RecipeStep
     {
-        internal readonly string Description;
+
+        public RecipeStep(string description)
+        {
+            this.Description = description;
+        }
+
+        public string Description { get; }
     }
 
     internal class OrderPreparationRequest

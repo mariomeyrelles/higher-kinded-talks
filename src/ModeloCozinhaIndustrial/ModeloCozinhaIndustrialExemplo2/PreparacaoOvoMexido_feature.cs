@@ -10,9 +10,9 @@ namespace ModeloCozinhaIndustrialExemplo2
 
     [TestClass]
     [FeatureDescription(
-@"In order to prepare an scrambled egg
-As an Chef
-I want to use the ingredients to prepare the dish")]
+@"Para conseguir preparar um ovo mexido
+Como um Chef
+Eu quero seguir uma receita, usar ingredientes e preparar o prato")]
     [Label("Story-1")]
     public partial class PreparacaoOvoMexido_feature
     {
@@ -23,11 +23,11 @@ I want to use the ingredients to prepare the dish")]
             Runner.RunScenario(
                 _ => Given_kitchen_is_available(),
                 _ => Given_chef_is_available(),
-                _ => When_an_order_arrives_at_the_kitchen("Table1", "Scrambled Egg"),
+                _ => When_an_order_arrives_at_the_kitchen("Mesa 1", "Ovo Mexido"),
                 _ => Then_dish_preparation_is_started(),
                 _ => Then_recipe_is_selected(),
                 _ => Then_ingredients_are_available(),
-                _ => Then_ingredients_are_available(),
+                _ => Then_recipe_steps_are_available(),
                 _ => Then_chef_prepares_the_dish(),
                 _ => Then_order_is_fullfilled()
              );
