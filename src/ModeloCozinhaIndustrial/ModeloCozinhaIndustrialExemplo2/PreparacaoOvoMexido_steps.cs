@@ -89,7 +89,11 @@ namespace ModeloCozinhaIndustrialExemplo2
 
         private void Then_recipe_steps_are_available()
         {
-
+            Assert.IsTrue(currentRecipe.Steps[0].Description == "Coloque os ovos em recipiente e deixe por 2 minutos");
+            Assert.IsTrue(currentRecipe.Steps[1].Description == "Ligue a frigideira, coloque a manteiga e mexa bem");
+            Assert.IsTrue(currentRecipe.Steps[2].Description == "Coloque os ovos e mexa bem");
+            Assert.IsTrue(currentRecipe.Steps[3].Description == "Junte o leite e continue mexendo");
+            Assert.IsTrue(currentRecipe.Steps[4].Description == "Coloque o sal e mexa até ficar consistente");
         }
 
 
@@ -199,8 +203,15 @@ namespace ModeloCozinhaIndustrialExemplo2
 
     internal class Recipe
     {
+
         public List<Ingredient> Ingredients = new List<Ingredient>();
+        public List<RecipeStep> Steps = new List<RecipeStep>();
         public string RecipeName { get; internal set; }
+    }
+
+    public class RecipeStep
+    {
+        internal readonly string Description;
     }
 
     internal class OrderPreparationRequest
