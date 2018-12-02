@@ -29,10 +29,10 @@ namespace ModeloCozinhaIndustrialExemplo2
 
             var scrambledEgg = new Recipe();
 
-            scrambledEgg.Ingredients.Add(new Ingredient() { Name = "Ovo",      Quantity = 1.0m, UnitOfMeasure = "unidade" });
-            scrambledEgg.Ingredients.Add(new Ingredient() { Name = "Leite",    Quantity = 1.0m, UnitOfMeasure = "xícara" });
-            scrambledEgg.Ingredients.Add(new Ingredient() { Name = "Manteiga", Quantity = 2.0m, UnitOfMeasure = "colher" });
-            scrambledEgg.Ingredients.Add(new Ingredient() { Name = "Sal",      Quantity = 1.0m, UnitOfMeasure = "pitada" });
+            scrambledEgg.Ingredients.Add(new Ingredient(name: "Ovo",      quantity: 1.0m, uom: "unidade"));
+            scrambledEgg.Ingredients.Add(new Ingredient(name: "Leite",    quantity: 1.0m, uom: "xícara"));
+            scrambledEgg.Ingredients.Add(new Ingredient(name: "Manteiga", quantity: 2.0m, uom: "colher"));
+            scrambledEgg.Ingredients.Add(new Ingredient(name: "Sal",      quantity: 1.0m, uom: "pitada"));
 
             scrambledEgg.RecipeName = "Scrambled Egg";
 
@@ -78,10 +78,10 @@ namespace ModeloCozinhaIndustrialExemplo2
 
         private void Then_ingredients_are_available()
         {
-            Assert.IsTrue(currentRecipe.Ingredients.Contains(new Ingredient() { Name = "Ovo", Quantity = 1.0m, UnitOfMeasure = "unidade" }));
-            Assert.IsTrue(currentRecipe.Ingredients.Contains(new Ingredient() { Name = "Leite", Quantity = 1.0m, UnitOfMeasure = "xícara" }));
-            Assert.IsTrue(currentRecipe.Ingredients.Contains(new Ingredient() { Name = "Manteiga", Quantity = 2.0m, UnitOfMeasure = "colher" }));
-            Assert.IsTrue(currentRecipe.Ingredients.Contains(new Ingredient() { Name = "Sal", Quantity = 1.0m, UnitOfMeasure = "pitada" }));
+            Assert.IsTrue(currentRecipe.Ingredients.Contains(new Ingredient(name: "Ovo",      quantity: 1.0m, uom: "unidade")));
+            Assert.IsTrue(currentRecipe.Ingredients.Contains(new Ingredient(name: "Leite",    quantity: 1.0m, uom: "xícara")));
+            Assert.IsTrue(currentRecipe.Ingredients.Contains(new Ingredient(name: "Manteiga", quantity: 2.0m, uom: "colher")));
+            Assert.IsTrue(currentRecipe.Ingredients.Contains(new Ingredient(name: "Sal",      quantity: 1.0m, uom: "pitada")));
 
 
         }
@@ -107,13 +107,47 @@ namespace ModeloCozinhaIndustrialExemplo2
 
         }
     }
-    
+
     public class Ingredient
     {
-       
-        public string Name { get; internal set; }
-        public decimal Quantity { get; internal set; }
-        public string UnitOfMeasure { get; internal set; }
+        public Ingredient(string name, decimal quantity, string uom)
+        {
+            this.Name = name;
+            this.Quantity = quantity;
+            this.UnitOfMeasure = uom;
+
+        }
+
+        public string Name { get; }
+        public decimal Quantity { get; }
+        public string UnitOfMeasure { get; }
+
+        public override bool Equals(object obj)
+        {
+            var other = (Ingredient)obj;
+
+            if (this.Name == other.Name)
+                if (this.Quantity == other.Quantity)
+                    if (this.UnitOfMeasure == other.UnitOfMeasure)
+                        return true;
+
+            return false;
+
+        }
+
+        public override int GetHashCode()
+        {
+            // https://stackoverflow.com/questions/263400/what-is-the-best-algorithm-for-an-overridden-system-object-gethashcode
+
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + this.Name.GetHashCode();
+                hash = hash * 23 + this.Quantity.GetHashCode();
+                hash = hash * 23 + this.UnitOfMeasure.GetHashCode();
+                return hash;
+            }
+        }
     }
 
 
