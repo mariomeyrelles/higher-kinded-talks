@@ -40,7 +40,8 @@ namespace ModeloCozinhaIndustrialExemplo2
                 new RecipeStep(description: "Ligue a frigideira, coloque a manteiga e mexa bem"),
                 new RecipeStep(description: "Coloque os ovos e mexa bem"),
                 new RecipeStep(description: "Junte o leite e continue mexendo"),
-                new RecipeStep(description: "Coloque o sal e mexa até ficar consistente")
+                new RecipeStep(description: "Coloque o sal e mexa até ficar consistente"),
+                new RecipeStep(description: "Finalização", isLastStep: true)
             };
 
             var scrambledEgg = new Recipe(recipeName: "Ovo Mexido", ingredients: scrambledEggIngredients, steps: scrambledEggPreparationSteps);
@@ -101,12 +102,23 @@ namespace ModeloCozinhaIndustrialExemplo2
             Assert.IsTrue(currentRecipe.Steps[2].Description == "Coloque os ovos e mexa bem");
             Assert.IsTrue(currentRecipe.Steps[3].Description == "Junte o leite e continue mexendo");
             Assert.IsTrue(currentRecipe.Steps[4].Description == "Coloque o sal e mexa até ficar consistente");
+            Assert.IsTrue(currentRecipe.Steps[4].IsLastStep == false);
+            Assert.IsTrue(currentRecipe.Steps[4].Description == "Finalização");
+            Assert.IsTrue(currentRecipe.Steps[4].IsLastStep == true);
         }
 
 
-        private object Then_chef_prepares_the_dish()
+        private void Then_chef_prepares_the_dish()
         {
-            throw new NotImplementedException();
+
+            var firstStep = currentOrderPreparationRequest.StartExecution();
+            var secondStep = currentOrderPreparationRequest.CompleteStep(firstStep);
+            var thirdStep = currentOrderPreparationRequest.CompleteStep(secondStep);
+            var fourthStep = currentOrderPreparationRequest.CompleteStep(thirdStep);
+            var fifthStep = currentOrderPreparationRequest.CompleteStep(fourthStep);
+            var completionStep = currentOrderPreparationRequest.CompleteStep(fourthStep);
+            var ??? = currentOrderPreparationRequest.CompleteStep(completionStep);
+
 
 
 
@@ -226,11 +238,13 @@ namespace ModeloCozinhaIndustrialExemplo2
     public class RecipeStep
     {
 
-        public RecipeStep(string description)
+        public RecipeStep(string description, bool isLastStep = false)
         {
             this.Description = description;
+            this.IsLastStep = isLastStep;
         }
 
+        public bool IsLastStep { get; }
         public string Description { get; }
     }
 
@@ -238,12 +252,24 @@ namespace ModeloCozinhaIndustrialExemplo2
     {
         public DishPreparationOrder Order { get; internal set; }
         public PreparationRequest Accepted { get; internal set; }
+
+        public RecipeStep StartExecution()
+        {
+            this.Order.
+        }
+
+        public RecipeStep CompleteStep(RecipeStep firstStep)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     enum PreparationRequest
     {
         Accepted = 1,
         Rejected = 2,
+        WorkInProgress = 3,
+        Completed = 4
     }
 
     enum ChefAvailability
