@@ -6,11 +6,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using ModeloCozinhaIndustrialExemplo2.KitchenWorkflow;
 
 namespace ModeloCozinhaIndustrialExemplo2
 {
 
-    
+
     public partial class PreparacaoOvoMexido_feature : FeatureFixture
     {
 
@@ -51,9 +52,7 @@ namespace ModeloCozinhaIndustrialExemplo2
         private void Given_chef_is_available()
         {
             var availabiltyResult = kitchen.GetChefAvailability();
-
             Assert.IsTrue(availabiltyResult.Availability == ChefAvailability.Idle);
-
             currentChef = availabiltyResult.ChefName;
         }
 
@@ -125,217 +124,12 @@ namespace ModeloCozinhaIndustrialExemplo2
             Assert.IsTrue(afterCompletionStep.CompletedAt > DateTime.MinValue);
             Assert.IsTrue(afterCompletionStep.CompletedAt <= currentOrder.PreparationEndTime);
 
-
-
-
         }
 
 
         private void Then_order_is_fullfilled()
         {
-
+            Assert.IsTrue(currentOrder.PreparationStartTime < currentOrder.PreparationEndTime);
         }
-    }
-
-    public class Ingredient
-    {
-        public Ingredient(string name, decimal quantity, string uom)
-        {
-            this.Name = name;
-            this.Quantity = quantity;
-            this.UnitOfMeasure = uom;
-
-        }
-
-        public string Name { get; }
-        public decimal Quantity { get; }
-        public string UnitOfMeasure { get; }
-
-        public override bool Equals(object obj)
-        {
-            var other = (Ingredient)obj;
-
-            if (this.Name == other.Name)
-                if (this.Quantity == other.Quantity)
-                    if (this.UnitOfMeasure == other.UnitOfMeasure)
-                        return true;
-
-            return false;
-
-        }
-
-        public override int GetHashCode()
-        {
-            // https://stackoverflow.com/questions/263400/what-is-the-best-algorithm-for-an-overridden-system-object-gethashcode
-
-            unchecked
-            {
-                int hash = 17;
-                hash = hash * 23 + this.Name.GetHashCode();
-                hash = hash * 23 + this.Quantity.GetHashCode();
-                hash = hash * 23 + this.UnitOfMeasure.GetHashCode();
-                return hash;
-            }
-        }
-    }
-
-
-    internal class DishPreparationOrder
-    {
-        public string Table;
-        public string Dish;
-        public string ChefName;
-
-        public DateTime PreparationStartTime { get; internal set; }
-        public Recipe Recipe { get; internal set; }
-        public DateTime PreparationEndTime { get; internal set; }
-    }
-
-    internal class Kitchen
-    {
-        private List<Recipe> recipes = new List<Recipe>();
-
-        internal ChefAvailabilityResult GetChefAvailability()
-        {
-            var result = new ChefAvailabilityResult
-            {
-                Availability = ChefAvailability.Idle,
-                ChefName = "Chef 1"
-            };
-
-            return result;
-        }
-
-        internal OrderPreparationRequest StartPreparation(DishPreparationOrder order)
-        {
-            var request = new OrderPreparationRequest
-            {
-                Order = order
-            };
-
-            return request;
-        }
-
-        internal Recipe GetRecipe(OrderPreparationRequest request)
-        {
-            var recipe = (from x in this.recipes
-                         where x.RecipeName == request.Order.Dish
-                         select x).Single();
-            return recipe;
-        }
-
-        internal void RegisterRecipe(Recipe recipe)
-        {
-            this.recipes.Add(recipe);
-        }
-    }
-
-    internal class Recipe
-    {
-        public Recipe(string recipeName, List<Ingredient> ingredients, List<RecipeStep> steps)
-        {
-            this.RecipeName = recipeName;
-            this.Ingredients = ingredients;
-            this.Steps = steps;
-          
-        }
-
-        public string RecipeName { get; }
-        public IReadOnlyList<RecipeStep> Steps { get; }
-        public IReadOnlyList<Ingredient> Ingredients { get;  }
-
-        internal RecipeStep GetFirstStep()
-        {
-            return this.Steps.First();
-        }
-    }
-
-    
-
-    public class RecipeStep
-    {
-
-        public RecipeStep(string description, bool isLastStep = false)
-        {
-            this.Description = description;
-            this.IsLastStep = isLastStep;
-        }
-
-        public bool IsLastStep { get; }
-        public string Description { get; }
-        public DateTime StartedAt { get; protected set; }
-        public DateTime CompletedAt { get; protected set; }
-
-        public void SetStartTime()
-        {
-            this.StartedAt = DateTime.Now;
-        }
-
-        public void SetCompleteTime()
-        {
-            this.CompletedAt = DateTime.Now;
-        }
-    }
-
-
-
-
-    internal class OrderPreparationRequest
-    {
-        public DishPreparationOrder Order { get; internal set; }
-        public PreparationRequest PreparationRequestStatus { get; internal set; }
-
-        public RecipeStep StartExecution()
-        {
-            this.PreparationRequestStatus = PreparationRequest.WorkInProgress;
-            this.Order.PreparationStartTime = DateTime.Now;
-            var firstStep = this.Order.Recipe.GetFirstStep();
-            return firstStep;
-        }
-
-        public RecipeStep CompleteStep(RecipeStep step)
-        {
-            var steps = this.Order.Recipe.Steps.ToList();
-            step.SetCompleteTime();
-
-            var nextStepId = steps.IndexOf(step) + 1;
-            var nextStep = step;
-
-            if (nextStepId <= steps.Count -1)
-            {
-                nextStep = steps[nextStepId];
-                nextStep.SetStartTime();
-            }
-            else
-            {
-                this.Order.PreparationEndTime = DateTime.Now;
-                this.PreparationRequestStatus = PreparationRequest.Completed;
-            }
-
-            
-            return nextStep;
-        }
-
-    }
-
-    enum PreparationRequest
-    {
-        Accepted = 1,
-        Rejected = 2,
-        WorkInProgress = 3,
-        Completed = 4
-    }
-
-    enum ChefAvailability
-    {
-        Idle = 1,
-        Unavailable = 2,
-        AvailableSoon = 3
-    }
-
-    class ChefAvailabilityResult
-    {
-        public ChefAvailability Availability { get; internal set; }
-        public string ChefName { get; internal set; }
     }
 }
