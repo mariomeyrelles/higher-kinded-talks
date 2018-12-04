@@ -1,14 +1,11 @@
-using LightBDD.Framework;
-using LightBDD.Framework.Formatting;
-using LightBDD.Framework.Scenarios.Basic;
 using LightBDD.MsTest2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using ModeloCozinhaIndustrialExemplo2.KitchenWorkflow;
+using IndustrialKitchenExample2.KitchenWorkflow;
 
-namespace ModeloCozinhaIndustrialExemplo2
+namespace IndustrialKitchenExample2
 {
 
 

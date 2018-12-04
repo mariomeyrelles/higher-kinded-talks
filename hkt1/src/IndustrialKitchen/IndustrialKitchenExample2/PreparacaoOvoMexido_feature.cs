@@ -5,7 +5,7 @@ using LightBDD.MsTest2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace ModeloCozinhaIndustrialExemplo2
+namespace IndustrialKitchenExample2
 {
 
     [TestClass]

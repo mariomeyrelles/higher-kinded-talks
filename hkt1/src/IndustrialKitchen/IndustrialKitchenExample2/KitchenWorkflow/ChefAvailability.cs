@@ -1,4 +1,4 @@
-﻿namespace ModeloCozinhaIndustrialExemplo2.KitchenWorkflow
+﻿namespace IndustrialKitchenExample2.KitchenWorkflow
 {
     enum ChefAvailability
     {

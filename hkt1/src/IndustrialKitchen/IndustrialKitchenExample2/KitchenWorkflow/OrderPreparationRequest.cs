@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace ModeloCozinhaIndustrialExemplo2.KitchenWorkflow
+namespace IndustrialKitchenExample2.KitchenWorkflow
 {
     public class OrderPreparationRequest
     {

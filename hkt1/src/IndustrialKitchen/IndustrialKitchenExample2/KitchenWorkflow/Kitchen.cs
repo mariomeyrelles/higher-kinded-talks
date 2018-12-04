@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 
-namespace ModeloCozinhaIndustrialExemplo2.KitchenWorkflow
+namespace IndustrialKitchenExample2.KitchenWorkflow
 {
     public class Kitchen
     {
