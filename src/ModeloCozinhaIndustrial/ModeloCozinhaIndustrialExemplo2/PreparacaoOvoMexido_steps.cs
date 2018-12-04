@@ -72,7 +72,7 @@ namespace ModeloCozinhaIndustrialExemplo2
         private void Then_dish_preparation_is_started()
         {
             var orderPreparationRequest = kitchen.StartPreparation(currentOrder);
-            Assert.IsTrue(orderPreparationRequest.Accepted == orderPreparationRequest.Accepted);
+            Assert.IsTrue(orderPreparationRequest.PreparationRequestStatus == orderPreparationRequest.PreparationRequestStatus);
             currentOrderPreparationRequest = orderPreparationRequest;
 
         }
@@ -81,6 +81,7 @@ namespace ModeloCozinhaIndustrialExemplo2
         {
             var recipe = kitchen.GetRecipe(currentOrderPreparationRequest);
             currentRecipe = recipe;
+            currentOrder.Recipe = recipe;
         
         }
 
@@ -103,8 +104,8 @@ namespace ModeloCozinhaIndustrialExemplo2
             Assert.IsTrue(currentRecipe.Steps[3].Description == "Junte o leite e continue mexendo");
             Assert.IsTrue(currentRecipe.Steps[4].Description == "Coloque o sal e mexa até ficar consistente");
             Assert.IsTrue(currentRecipe.Steps[4].IsLastStep == false);
-            Assert.IsTrue(currentRecipe.Steps[4].Description == "Finalização");
-            Assert.IsTrue(currentRecipe.Steps[4].IsLastStep == true);
+            Assert.IsTrue(currentRecipe.Steps[5].Description == "Finalização");
+            Assert.IsTrue(currentRecipe.Steps[5].IsLastStep == true);
         }
 
 
@@ -116,8 +117,13 @@ namespace ModeloCozinhaIndustrialExemplo2
             var thirdStep = currentOrderPreparationRequest.CompleteStep(secondStep);
             var fourthStep = currentOrderPreparationRequest.CompleteStep(thirdStep);
             var fifthStep = currentOrderPreparationRequest.CompleteStep(fourthStep);
-            var completionStep = currentOrderPreparationRequest.CompleteStep(fourthStep);
-            var ??? = currentOrderPreparationRequest.CompleteStep(completionStep);
+            var completionStep = currentOrderPreparationRequest.CompleteStep(fifthStep);
+            var afterCompletionStep = currentOrderPreparationRequest.CompleteStep(completionStep);
+
+            Assert.IsTrue(currentOrderPreparationRequest.PreparationRequestStatus == PreparationRequest.Completed);
+            Assert.IsTrue(afterCompletionStep.IsLastStep == true);
+            Assert.IsTrue(afterCompletionStep.CompletedAt > DateTime.MinValue);
+            Assert.IsTrue(afterCompletionStep.CompletedAt <= currentOrder.PreparationEndTime);
 
 
 
@@ -179,6 +185,10 @@ namespace ModeloCozinhaIndustrialExemplo2
         public string Table;
         public string Dish;
         public string ChefName;
+
+        public DateTime PreparationStartTime { get; internal set; }
+        public Recipe Recipe { get; internal set; }
+        public DateTime PreparationEndTime { get; internal set; }
     }
 
     internal class Kitchen
@@ -233,7 +243,14 @@ namespace ModeloCozinhaIndustrialExemplo2
         public string RecipeName { get; }
         public IReadOnlyList<RecipeStep> Steps { get; }
         public IReadOnlyList<Ingredient> Ingredients { get;  }
+
+        internal RecipeStep GetFirstStep()
+        {
+            return this.Steps.First();
+        }
     }
+
+    
 
     public class RecipeStep
     {
@@ -246,22 +263,59 @@ namespace ModeloCozinhaIndustrialExemplo2
 
         public bool IsLastStep { get; }
         public string Description { get; }
+        public DateTime StartedAt { get; protected set; }
+        public DateTime CompletedAt { get; protected set; }
+
+        public void SetStartTime()
+        {
+            this.StartedAt = DateTime.Now;
+        }
+
+        public void SetCompleteTime()
+        {
+            this.CompletedAt = DateTime.Now;
+        }
     }
+
+
+
 
     internal class OrderPreparationRequest
     {
         public DishPreparationOrder Order { get; internal set; }
-        public PreparationRequest Accepted { get; internal set; }
+        public PreparationRequest PreparationRequestStatus { get; internal set; }
 
         public RecipeStep StartExecution()
         {
-            this.Order.
+            this.PreparationRequestStatus = PreparationRequest.WorkInProgress;
+            this.Order.PreparationStartTime = DateTime.Now;
+            var firstStep = this.Order.Recipe.GetFirstStep();
+            return firstStep;
         }
 
-        public RecipeStep CompleteStep(RecipeStep firstStep)
+        public RecipeStep CompleteStep(RecipeStep step)
         {
-            throw new NotImplementedException();
+            var steps = this.Order.Recipe.Steps.ToList();
+            step.SetCompleteTime();
+
+            var nextStepId = steps.IndexOf(step) + 1;
+            var nextStep = step;
+
+            if (nextStepId <= steps.Count -1)
+            {
+                nextStep = steps[nextStepId];
+                nextStep.SetStartTime();
+            }
+            else
+            {
+                this.Order.PreparationEndTime = DateTime.Now;
+                this.PreparationRequestStatus = PreparationRequest.Completed;
+            }
+
+            
+            return nextStep;
         }
+
     }
 
     enum PreparationRequest
